@@ -171,6 +171,10 @@ func (configFile *ConfigFile) Save() (retErr error) {
 	cfgFile := configFile.Filename
 	if f, err := os.Readlink(cfgFile); err == nil {
 		cfgFile = f
+		// The target of a symlink can be a relative path, ensure the final path is absolute
+		if !filepath.IsAbs(f) {
+			cfgFile = filepath.Join(dir, f)
+		}
 	}
 
 	// Try copying the current config file (if any) ownership and permissions
