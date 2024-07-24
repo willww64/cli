@@ -171,9 +171,6 @@ func (configFile *ConfigFile) Save() (retErr error) {
 	cfgFile := configFile.Filename
 	if f, err := filepath.EvalSymlinks(cfgFile); err == nil {
 		cfgFile = f
-	} else if os.IsNotExist(err) {
-		// extract the path from the error if the configfile does not exist or is a dangling symlink
-		cfgFile = err.(*os.PathError).Path
 	}
 
 	// Try copying the current config file (if any) ownership and permissions
