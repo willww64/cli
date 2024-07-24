@@ -4,7 +4,6 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"io"
-	"io/fs"
 	"os"
 	"path/filepath"
 	"strings"
@@ -175,7 +174,7 @@ func (configFile *ConfigFile) Save() (retErr error) {
 		cfgFile = f
 	} else if os.IsNotExist(err) {
 		// extract the path from the error if `cfgFile` does not exist or is a dangling symlink
-		cfgFile = err.(*fs.PathError).Path
+		cfgFile = err.(*os.PathError).Path
 	}
 
 	// Try copying the current config file (if any) ownership and permissions
