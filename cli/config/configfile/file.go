@@ -167,12 +167,12 @@ func (configFile *ConfigFile) Save() (retErr error) {
 		return errors.Wrap(err, "error closing temp file")
 	}
 
-	// Handle situations where `configFile.Filename` is a symlink, and allow for dangling symlinks
+	// Handle situation where the configfile is a symlink, and allow for dangling symlinks
 	cfgFile := configFile.Filename
 	if f, err := filepath.EvalSymlinks(cfgFile); err == nil {
 		cfgFile = f
 	} else if os.IsNotExist(err) {
-		// extract the path from the error if `cfgFile` does not exist or is a dangling symlink
+		// extract the path from the error if the configfile does not exist or is a dangling symlink
 		cfgFile = err.(*os.PathError).Path
 	}
 
