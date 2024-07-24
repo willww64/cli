@@ -4,6 +4,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"io"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"strings"
@@ -167,9 +168,9 @@ func (configFile *ConfigFile) Save() (retErr error) {
 		return errors.Wrap(err, "error closing temp file")
 	}
 
-	// Handle situation where the configfile is a symlink
 	cfgFile := configFile.Filename
-	if f, err := filepath.EvalSymlinks(cfgFile); err == nil {
+	// Handle situations where `configFile.Filename` is a symlink, and allow for dangling symlinks
+	if f, err := filepath.EvalSymlinks(cfgFile); err == nil || errors.Is(err, fs.ErrNotExist) {
 		cfgFile = f
 	}
 
